@@ -3,20 +3,28 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Stock</title>
+  <title>Stock Cupcake</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600&display=swap');
+
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Quicksand', sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #f2f2f2;
+      background: linear-gradient(to right, #ffe0f0, #fff0e6);
     }
 
     header {
       text-align: center;
-      background-color: #f8f9fa;
-      padding: 20px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      background-color: #f9a8d4;
+      color: #fff;
+      padding: 30px;
+      box-shadow: 0 4px 8px rgba(249, 168, 212, 0.5);
+    }
+
+    header h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: 2.5rem;
     }
 
     main {
@@ -29,30 +37,42 @@
       width: 90%;
       max-width: 1000px;
       border-collapse: collapse;
-      background-color: white;
+      background-color: #fff0f6;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
     th, td {
-      padding: 15px;
+      padding: 20px;
       text-align: center;
-      border: 1px solid #ddd;
+      border: 1px solid #fbcfe8;
     }
 
     th {
-      background-color: #007bff;
+      background-color: #f472b6;
       color: white;
+      font-size: 1.1rem;
+    }
+
+    td {
+      background-color: #fff7fb;
+      color: #6b21a8;
     }
 
     img {
-      max-width: 100px;
+      max-width: 80px;
       height: auto;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(249, 168, 212, 0.5);
     }
 
     footer {
       text-align: center;
-      padding: 15px;
-      background-color: #343a40;
+      padding: 20px;
+      background-color: #f472b6;
       color: white;
+      font-weight: bold;
     }
 
     @media (max-width: 600px) {
@@ -76,6 +96,7 @@
         left: 15px;
         text-align: left;
         font-weight: bold;
+        color: #d946ef;
       }
     }
   </style>
@@ -83,7 +104,7 @@
 <body>
 
   <header>
-    <h1>Bienvenido a Stock!</h1>
+    <h1>Bienvenido a Stock</h1>
   </header>
 
   <main>
@@ -101,20 +122,20 @@
           <td data-label="Nombre">Producto 1</td>
           <td data-label="Descripción">Descripción del producto 1</td>
           <td data-label="Precio">$10.00</td>
-          <td data-label="Imagen"><img src="https://via.placeholder.com/150" alt="Producto 1" /></td>
+          <td data-label="Imagen"><img src="https://via.placeholder.com/150/FFC0CB/000000?text=Cupcake+1" alt="Producto 1" /></td>
         </tr>
         <tr>
           <td data-label="Nombre">Producto 2</td>
           <td data-label="Descripción">Descripción del producto 2</td>
           <td data-label="Precio">$20.00</td>
-          <td data-label="Imagen"><img src="https://via.placeholder.com/150" alt="Producto 2" /></td>
+          <td data-label="Imagen"><img src="https://via.placeholder.com/150/FFDDEE/000000?text=Cupcake+2" alt="Producto 2" /></td>
         </tr>
       </tbody>
     </table>
   </main>
 
   <footer>
-    <p>&copy; 2025 Stock. Todos los derechos reservados.</p> 
+    <p>&copy; 2025 Stock Cupcake. Todos los derechos reservados</p>
   </footer>
 
 </body>

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Módulo de Stock - Equipos Computacionales</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Gestión de Stock TechStock</h1>
+    </header>
+
+    <nav>
+      <a href="home.html">Inicio</a>
+      <a href="stock.html" class="active">Stock</a>
+      <a href="#">Productos</a>
+      <a href="#">Proveedores</a>
+      <a href="#">Reportes</a>
+    </nav>
+
+    <div class="container">
+      <div class="search-bar">
+        <div class="search-input">
+          <label for="product-search">Buscar por nombre:</label>
+          <input
+            type="text"
+            id="product-search"
+            placeholder="Nombre del producto..."
+          />
+        </div>
+        <button class="search-button" id="btn-search">Buscar</button>
+      </div>
+
+      <table id="stock-table">
+        <thead>
+          <tr>
+            <th>Nombre del Producto</th>
+            <th>Categoría</th>
+            <th>Stock</th>
+            <th>Proveedor</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Laptop HP Pavilion 15</td>
+            <td>Laptops</td>
+            <td class="stock-value">12</td>
+            <td>HP Chile</td>
+            <td>
+              <div class="stock-controls">
+                <button class="btn-decrement">-</button>
+                <button class="btn-increment">+</button>
+                <button class="btn-edit">✏️</button>
+                <button class="btn-delete">🗑️</button>
+              </div>
+            </td>
+          </tr>
+          <tr class="stock-warning">
+            <td>Monitor LG UltraGear 27"</td>
+            <td>Periféricos</td>
+            <td class="stock-value">5</td>
+            <td>Distribuidora LG</td>
+            <td>
+              <div class="stock-controls">
+                <button class="btn-decrement">-</button>
+                <button class="btn-increment">+</button>
+                <button class="btn-edit">✏️</button>
+                <button class="btn-delete">🗑️</button>
+              </div>
+            </td>
+          </tr>
+          <tr class="stock-critical">
+            <td>Tarjeta Gráfica NVIDIA RTX 3060</td>
+            <td>Componentes</td>
+            <td class="stock-value">2</td>
+            <td>TechImport</td>
+            <td>
+              <div class="stock-controls">
+                <button class="btn-decrement">-</button>
+                <button class="btn-increment">+</button>
+                <button class="btn-edit">✏️</button>
+                <button class="btn-delete">🗑️</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Teclado Mecánico Logitech G Pro</td>
+            <td>Periféricos</td>
+            <td class="stock-value">15</td>
+            <td>Logitech Chile</td>
+            <td>
+              <div class="stock-controls">
+                <button class="btn-decrement">-</button>
+                <button class="btn-increment">+</button>
+                <button class="btn-edit">✏️</button>
+                <button class="btn-delete">🗑️</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Disco SSD Kingston 480GB</td>
+            <td>Componentes</td>
+            <td class="stock-value">23</td>
+            <td>Importadora Kingston</td>
+            <td>
+              <div class="stock-controls">
+                <button class="btn-decrement">-</button>
+                <button class="btn-increment">+</button>
+                <button class="btn-edit">✏️</button>
+                <button class="btn-delete">🗑️</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Memoria RAM Corsair 16GB DDR4</td>
+            <td>Componentes</td>
+            <td class="stock-value">18</td>
+            <td>TechImport</td>
+            <td>
+              <div class="stock-controls">
+                <button class="btn-decrement">-</button>
+                <button class="btn-increment">+</button>
+                <button class="btn-edit">✏️</button>
+                <button class="btn-delete">🗑️</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>Mouse Inalámbrico Logitech MX</td>
+            <td>Periféricos</td>
+            <td class="stock-value">9</td>
+            <td>Logitech Chile</td>
+            <td>
+              <div class="stock-controls">
+                <button class="btn-decrement">-</button>
+                <button class="btn-increment">+</button>
+                <button class="btn-edit">✏️</button>
+                <button class="btn-delete">🗑️</button>
+              </div>
+            </td>
+          </tr>
+          <tr class="stock-warning">
+            <td>Impresora HP LaserJet Pro</td>
+            <td>Periféricos</td>
+            <td class="stock-value">4</td>
+            <td>HP Chile</td>
+            <td>
+              <div class="stock-controls">
+                <button class="btn-decrement">-</button>
+                <button class="btn-increment">+</button>
+                <button class="btn-edit">✏️</button>
+                <button class="btn-delete">🗑️</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="text-align: right; margin-top: 20px">
+        <button id="btn-add-product" class="search-button">
+          Agregar Producto
+        </button>
+        <button id="btn-save-changes" class="search-button">
+          Guardar Cambios
+        </button>
+      </div>
+    </div>
+
+    <footer>
+      <p>
+        &copy; 2025 TechStock - Sistema de Inventario para Equipos
+        Computacionales. Todos los derechos reservados.
+      </p>
+    </footer>
+
+    <script>
+      // Funcionalidad para filtrar productos por nombre
+      document
+        .getElementById("btn-search")
+        .addEventListener("click", function () {
+          const searchTerm = document
+            .getElementById("product-search")
+            .value.toLowerCase();
+          const rows = document.querySelectorAll("#stock-table tbody tr");
+
+          rows.forEach((row) => {
+            const productName = row.cells[0].textContent.toLowerCase();
+            if (productName.includes(searchTerm)) {
+              row.style.display = "";
+            } else {
+              row.style.display = "none";
+            }
+          });
+        });
+
+      // También filtrar al presionar Enter en el campo de búsqueda
+      document
+        .getElementById("product-search")
+        .addEventListener("keyup", function (event) {
+          if (event.key === "Enter") {
+            document.getElementById("btn-search").click();
+          }
+        });
+
+      // Funcionalidad para incrementar stock
+      document.querySelectorAll(".btn-increment").forEach((button) => {
+        button.addEventListener("click", function () {
+          const row = this.closest("tr");
+          const stockCell = row.querySelector(".stock-value");
+          let currentStock = parseInt(stockCell.textContent);
+          stockCell.textContent = currentStock + 1;
+
+          // Actualizar clases de advertencia basadas en el nuevo valor de stock
+          updateStockWarningClass(row, currentStock + 1);
+        });
+      });
+
+      // Funcionalidad para decrementar stock
+      document.querySelectorAll(".btn-decrement").forEach((button) => {
+        button.addEventListener("click", function () {
+          const row = this.closest("tr");
+          const stockCell = row.querySelector(".stock-value");
+          let currentStock = parseInt(stockCell.textContent);
+
+          if (currentStock > 0) {
+            stockCell.textContent = currentStock - 1;
+
+            // Actualizar clases de advertencia basadas en el nuevo valor de stock
+            updateStockWarningClass(row, currentStock - 1);
+          }
+        });
+      });
+
+      // Función para actualizar las clases de advertencia de stock
+      function updateStockWarningClass(row, stockValue) {
+        row.classList.remove("stock-warning", "stock-critical");
+
+        if (stockValue <= 2) {
+          row.classList.add("stock-critical");
+        } else if (stockValue <= 5) {
+          row.classList.add("stock-warning");
+        }
+      }
+
+      // Funcionalidad para eliminar productos
+      function setupDeleteButtons() {
+        document.querySelectorAll(".btn-delete").forEach((button) => {
+          button.addEventListener("click", function () {
+            const row = this.closest("tr");
+            const productName = row.cells[0].textContent;
+
+            if (
+              confirm(
+                `¿Estás seguro de eliminar "${productName}" del inventario?`
+              )
+            ) {
+              // Animación de desvanecimiento antes de eliminar
+              row.style.transition = "opacity 0.5s";
+              row.style.opacity = "0";
+
+              setTimeout(() => {
+                row.remove();
+                alert(
+                  `El producto "${productName}" ha sido eliminado del inventario.`
+                );
+              }, 500);
+            }
+          });
+        });
+      }
+
+      // Funcionalidad para editar productos
+      function setupEditButtons() {
+        document.querySelectorAll(".btn-edit").forEach((button) => {
+          button.addEventListener("click", function () {
+            const row = this.closest("tr");
+            const cells = row.cells;
+
+            const productName = cells[0].textContent;
+            const category = cells[1].textContent;
+            const stock = parseInt(cells[2].textContent);
+            const provider = cells[3].textContent;
+
+            // Pedir nuevos valores mediante prompts (en un sistema real sería mejor usar un modal)
+            const newName = prompt("Editar nombre del producto:", productName);
+            if (!newName) return; // Cancelar si no se proporciona un nombre
+
+            const newCategory = prompt("Editar categoría:", category);
+            if (!newCategory) return;
+
+            const newStock = parseInt(
+              prompt("Editar cantidad de stock:", stock)
+            );
+            if (isNaN(newStock)) return;
+
+            const newProvider = prompt("Editar proveedor:", provider);
+            if (!newProvider) return;
+
+            // Actualizar los valores en la tabla
+            cells[0].textContent = newName;
+            cells[1].textContent = newCategory;
+            cells[2].textContent = newStock;
+            cells[3].textContent = newProvider;
+
+            // Actualizar clases de advertencia según el nuevo stock
+            updateStockWarningClass(row, newStock);
+
+            alert(`El producto ha sido actualizado correctamente.`);
+          });
+        });
+      }
+
+      // Inicializar funcionalidades de botones
+      setupDeleteButtons();
+      setupEditButtons();
+
+      // Botón guardar cambios - podría conectarse a un backend en el futuro
+      document
+        .getElementById("btn-save-changes")
+        .addEventListener("click", function () {
+          alert("Cambios de stock guardados correctamente");
+        });
+
+      // Botón agregar producto - implementación básica
+      document
+        .getElementById("btn-add-product")
+        .addEventListener("click", function () {
+          const productName = prompt("Ingrese nombre del producto:");
+          if (!productName) return;
+
+          const category = prompt("Ingrese categoría del producto:");
+          if (!category) return;
+
+          const stock = parseInt(prompt("Ingrese cantidad de stock:")) || 0;
+          const provider = prompt("Ingrese nombre del proveedor:");
+          if (!provider) return;
+
+          // Crear nueva fila en la tabla
+          const tbody = document.querySelector("#stock-table tbody");
+          const newRow = document.createElement("tr");
+
+          // Aplicar clases de advertencia según corresponda
+          if (stock <= 2) {
+            newRow.classList.add("stock-critical");
+          } else if (stock <= 5) {
+            newRow.classList.add("stock-warning");
+          }
+
+          newRow.innerHTML = `
+          <td>${productName}</td>
+          <td>${category}</td>
+          <td class="stock-value">${stock}</td>
+          <td>${provider}</td>
+          <td>
+            <div class="stock-controls">
+              <button class="btn-decrement">-</button>
+              <button class="btn-increment">+</button>
+              <button class="btn-edit">✏️</button>
+              <button class="btn-delete">🗑️</button>
+            </div>
+          </td>
+        `;
+
+          tbody.appendChild(newRow);
+
+          // Añadir event listeners a los nuevos botones
+          const decrementBtn = newRow.querySelector(".btn-decrement");
+          const incrementBtn = newRow.querySelector(".btn-increment");
+          const editBtn = newRow.querySelector(".btn-edit");
+          const deleteBtn = newRow.querySelector(".btn-delete");
+
+          decrementBtn.addEventListener("click", function () {
+            const stockCell = newRow.querySelector(".stock-value");
+            let currentStock = parseInt(stockCell.textContent);
+
+            if (currentStock > 0) {
+              stockCell.textContent = currentStock - 1;
+              updateStockWarningClass(newRow, currentStock - 1);
+            }
+          });
+
+          incrementBtn.addEventListener("click", function () {
+            const stockCell = newRow.querySelector(".stock-value");
+            let currentStock = parseInt(stockCell.textContent);
+            stockCell.textContent = currentStock + 1;
+            updateStockWarningClass(newRow, currentStock + 1);
+          });
+
+          // Añadir eventos para botones de editar y eliminar en el nuevo producto
+          editBtn.addEventListener("click", function () {
+            const cells = newRow.cells;
+
+            const currentName = cells[0].textContent;
+            const currentCategory = cells[1].textContent;
+            const currentStock = parseInt(cells[2].textContent);
+            const currentProvider = cells[3].textContent;
+
+            const newName = prompt("Editar nombre del producto:", currentName);
+            if (!newName) return;
+
+            const newCategory = prompt("Editar categoría:", currentCategory);
+            if (!newCategory) return;
+
+            const newStock = parseInt(
+              prompt("Editar cantidad de stock:", currentStock)
+            );
+            if (isNaN(newStock)) return;
+
+            const newProvider = prompt("Editar proveedor:", currentProvider);
+            if (!newProvider) return;
+
+            cells[0].textContent = newName;
+            cells[1].textContent = newCategory;
+            cells[2].textContent = newStock;
+            cells[3].textContent = newProvider;
+
+            updateStockWarningClass(newRow, newStock);
+
+            alert(`El producto ha sido actualizado correctamente.`);
+          });
+
+          deleteBtn.addEventListener("click", function () {
+            if (
+              confirm(
+                `¿Estás seguro de eliminar "${productName}" del inventario?`
+              )
+            ) {
+              newRow.style.transition = "opacity 0.5s";
+              newRow.style.opacity = "0";
+
+              setTimeout(() => {
+                newRow.remove();
+                alert(
+                  `El producto "${productName}" ha sido eliminado del inventario.`
+                );
+              }, 500);
+            }
+          });
+
+          alert("Producto agregado correctamente");
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inicio de Sesión Cupcake</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600&display=swap');
+
+    body {
+      margin: 0;
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(to bottom right, #ffe0f0, #fff0e6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-container {
+      background-color: #fff7fa;
+      border: 4px dashed #f9a8d4;
+      border-radius: 20px;
+      padding: 2rem;
+      width: 350px;
+      box-shadow: 0 0 20px rgba(249, 168, 212, 0.5);
+      text-align: center;
+    }
+
+    .login-container h2 {
+      font-family: 'Pacifico', cursive;
+      color: #ec4899;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.4rem;
+      color: #ec4899;
+      font-weight: 600;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.7rem;
+      border: 2px solid #f9a8d4;
+      border-radius: 10px;
+      background-color: #fff0f6;
+      font-size: 1rem;
+      color: #6b21a8;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #f472b6;
+      background-color: #ffe4f1;
+    }
+
+    .form-group button {
+      width: 100%;
+      padding: 0.8rem;
+      background-color: #f472b6;
+      color: white;
+      border: none;
+      border-radius: 15px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .form-group button:hover {
+      background-color: #ec4899;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Bienvenido </h2>
+    <form action="/login" method="POST">
+      <div class="form-group">
+        <label for="email">Correo electrónico</label>
+        <input type="email" id="email" name="email" required />
+      </div>
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" name="password" required />
+      </div>
+      <div class="form-group">
+        <button type="button" onclick="window.location.href='home.html'">Iniciar Sesión</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

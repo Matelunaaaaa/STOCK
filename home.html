@@ -1,164 +1,101 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Stock Cupcake</title>
-    <style>
-      @import url("https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600&display=swap");
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Inicio de Sesión Cupcake</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600&display=swap');
 
-      body {
-        font-family: "Quicksand", sans-serif;
-        margin: 0;
-        padding: 0;
-        background: linear-gradient(to right, #ffe0f0, #fff0e6);
-      }
+    body {
+      margin: 0;
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(to bottom right, #ffe0f0, #fff0e6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
 
-      header {
-        text-align: center;
-        background-color: #f9a8d4;
-        color: #fff;
-        padding: 30px;
-        box-shadow: 0 4px 8px rgba(249, 168, 212, 0.5);
-      }
+    .login-container {
+      background-color: #fff7fa;
+      border: 4px dashed #f9a8d4;
+      border-radius: 20px;
+      padding: 2rem;
+      width: 350px;
+      box-shadow: 0 0 20px rgba(249, 168, 212, 0.5);
+      text-align: center;
+    }
 
-      header h1 {
-        font-family: "Pacifico", cursive;
-        font-size: 2.5rem;
-      }
+    .login-container h2 {
+      font-family: 'Pacifico', cursive;
+      color: #ec4899;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
 
-      main {
-        padding: 40px 20px;
-        display: flex;
-        justify-content: center;
-      }
+    .form-group {
+      margin-bottom: 1.2rem;
+      text-align: left;
+    }
 
-      table {
-        width: 90%;
-        max-width: 1000px;
-        border-collapse: collapse;
-        background-color: #fff0f6;
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      }
+    .form-group label {
+      display: block;
+      margin-bottom: 0.4rem;
+      color: #ec4899;
+      font-weight: 600;
+    }
 
-      th,
-      td {
-        padding: 20px;
-        text-align: center;
-        border: 1px solid #fbcfe8;
-      }
+    .form-group input {
+      width: 100%;
+      padding: 0.7rem;
+      border: 2px solid #f9a8d4;
+      border-radius: 10px;
+      background-color: #fff0f6;
+      font-size: 1rem;
+      color: #6b21a8;
+    }
 
-      th {
-        background-color: #f472b6;
-        color: white;
-        font-size: 1.1rem;
-      }
+    .form-group input:focus {
+      outline: none;
+      border-color: #f472b6;
+      background-color: #ffe4f1;
+    }
 
-      td {
-        background-color: #fff7fb;
-        color: #6b21a8;
-      }
+    .form-group button {
+      width: 100%;
+      padding: 0.8rem;
+      background-color: #f472b6;
+      color: white;
+      border: none;
+      border-radius: 15px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
 
-      img {
-        max-width: 80px;
-        height: auto;
-        border-radius: 10px;
-        box-shadow: 0 2px 5px rgba(249, 168, 212, 0.5);
-      }
-
-      footer {
-        text-align: center;
-        padding: 20px;
-        background-color: #f472b6;
-        color: white;
-        font-weight: bold;
-      }
-
-      @media (max-width: 600px) {
-        table,
-        thead,
-        tbody,
-        th,
-        td,
-        tr {
-          display: block;
-        }
-
-        th {
-          display: none;
-        }
-
-        td {
-          text-align: right;
-          position: relative;
-          padding-left: 50%;
-        }
-
-        td::before {
-          content: attr(data-label);
-          position: absolute;
-          left: 15px;
-          text-align: left;
-          font-weight: bold;
-          color: #d946ef;
-        }
-      }
-    </style>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <header>
-      <h1>Bienvenido a Stock</h1>
-    </header>
-    <nav>
-      <a href="home.html">Inicio</a>
-      <a href="stock.html" class="active">Stock</a>
-      <a href="#">Productos</a>
-      <a href="#">Proveedores</a>
-      <a href="#">Reportes</a>
-    </nav>
-
-    <main>
-      <table>
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Descripción</th>
-            <th>Precio</th>
-            <th>Imagen</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td data-label="Nombre">Producto 1</td>
-            <td data-label="Descripción">Descripción del producto 1</td>
-            <td data-label="Precio">$10.00</td>
-            <td data-label="Imagen">
-              <img
-                src="https://via.placeholder.com/150/FFC0CB/000000?text=Cupcake+1"
-                alt="Producto 1"
-              />
-            </td>
-          </tr>
-          <tr>
-            <td data-label="Nombre">Producto 2</td>
-            <td data-label="Descripción">Descripción del producto 2</td>
-            <td data-label="Precio">$20.00</td>
-            <td data-label="Imagen">
-              <img
-                src="https://via.placeholder.com/150/FFDDEE/000000?text=Cupcake+2"
-                alt="Producto 2"
-              />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </main>
-
-    <footer>
-      <p>&copy; 2025 Stock Cupcake. Todos los derechos reservados</p>
-    </footer>
-  </body>
+    .form-group button:hover {
+      background-color: #ec4899;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Bienvenido </h2>
+    <form action="/login" method="POST">
+      <div class="form-group">
+        <label for="email">Correo electrónico</label>
+        <input type="email" id="email" name="email" required />
+      </div>
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" name="password" required />
+      </div>
+      <div class="form-group">
+        <button type="button" onclick="window.location.href='stock.html'">Iniciar Sesión</button>
+      </div>
+    </form>
+  </div>
+</body>
 </html>

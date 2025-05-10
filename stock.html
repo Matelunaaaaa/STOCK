@@ -12,7 +12,7 @@
     </header>
 
     <nav>
-      <a href="home.html" class="active" style="margin-left: 70%;">Cerrar Sesión</a>
+      <button onclick="cerrarSesion()">Cerrar sesión</button>
     </nav>
 
     <div class="container">
@@ -172,6 +172,17 @@
     </footer>
 
     <script>
+      // Verificar si el usuario está logueado
+      if (!localStorage.getItem('usuarioLogueado')) {
+        window.location.href = 'home.html'; // redirige al login si no inició sesión
+      }
+
+      // Funcionalidad para cerrar sesión
+      function cerrarSesion() {
+        localStorage.removeItem('usuarioLogueado'); // eliminar el usuario logueado
+        window.location.href = 'home.html'; // redirigir al login
+      }
+
       // Funcionalidad para filtrar productos por nombre
       document
         .getElementById("btn-search")
@@ -240,203 +251,31 @@
         }
       }
 
-      // Funcionalidad para eliminar productos
-      function setupDeleteButtons() {
-        document.querySelectorAll(".btn-delete").forEach((button) => {
-          button.addEventListener("click", function () {
-            const row = this.closest("tr");
-            const productName = row.cells[0].textContent;
-
-            if (
-              confirm(
-                `¿Estás seguro de eliminar "${productName}" del inventario?`
-              )
-            ) {
-              // Animación de desvanecimiento antes de eliminar
-              row.style.transition = "opacity 0.5s";
-              row.style.opacity = "0";
-
-              setTimeout(() => {
-                row.remove();
-                alert(
-                  `El producto "${productName}" ha sido eliminado del inventario.`
-                );
-              }, 500);
-            }
-          });
+      // Funcionalidad para editar producto
+      document.querySelectorAll(".btn-edit").forEach((button) => {
+        button.addEventListener("click", function () {
+          alert("Función de edición en desarrollo.");
         });
-      }
+      });
 
-      // Funcionalidad para editar productos
-      function setupEditButtons() {
-        document.querySelectorAll(".btn-edit").forEach((button) => {
-          button.addEventListener("click", function () {
-            const row = this.closest("tr");
-            const cells = row.cells;
-
-            const productName = cells[0].textContent;
-            const category = cells[1].textContent;
-            const stock = parseInt(cells[2].textContent);
-            const provider = cells[3].textContent;
-
-            // Pedir nuevos valores mediante prompts (en un sistema real sería mejor usar un modal)
-            const newName = prompt("Editar nombre del producto:", productName);
-            if (!newName) return; // Cancelar si no se proporciona un nombre
-
-            const newCategory = prompt("Editar categoría:", category);
-            if (!newCategory) return;
-
-            const newStock = parseInt(
-              prompt("Editar cantidad de stock:", stock)
-            );
-            if (isNaN(newStock)) return;
-
-            const newProvider = prompt("Editar proveedor:", provider);
-            if (!newProvider) return;
-
-            // Actualizar los valores en la tabla
-            cells[0].textContent = newName;
-            cells[1].textContent = newCategory;
-            cells[2].textContent = newStock;
-            cells[3].textContent = newProvider;
-
-            // Actualizar clases de advertencia según el nuevo stock
-            updateStockWarningClass(row, newStock);
-
-            alert(`El producto ha sido actualizado correctamente.`);
-          });
-        });
-      }
-
-      // Inicializar funcionalidades de botones
-      setupDeleteButtons();
-      setupEditButtons();
-
-      // Botón guardar cambios - podría conectarse a un backend en el futuro
-      document
-        .getElementById("btn-save-changes")
-        .addEventListener("click", function () {
-          alert("Cambios de stock guardados correctamente");
-        });
-
-      // Botón agregar producto - implementación básica
-      document
-        .getElementById("btn-add-product")
-        .addEventListener("click", function () {
-          const productName = prompt("Ingrese nombre del producto:");
-          if (!productName) return;
-
-          const category = prompt("Ingrese categoría del producto:");
-          if (!category) return;
-
-          const stock = parseInt(prompt("Ingrese cantidad de stock:")) || 0;
-          const provider = prompt("Ingrese nombre del proveedor:");
-          if (!provider) return;
-
-          // Crear nueva fila en la tabla
-          const tbody = document.querySelector("#stock-table tbody");
-          const newRow = document.createElement("tr");
-
-          // Aplicar clases de advertencia según corresponda
-          if (stock <= 2) {
-            newRow.classList.add("stock-critical");
-          } else if (stock <= 5) {
-            newRow.classList.add("stock-warning");
+      // Funcionalidad para eliminar producto
+      document.querySelectorAll(".btn-delete").forEach((button) => {
+        button.addEventListener("click", function () {
+          if (confirm("¿Está seguro de que desea eliminar este producto?")) {
+            this.closest("tr").remove();
           }
-
-          newRow.innerHTML = `
-          <td>${productName}</td>
-          <td>${category}</td>
-          <td class="stock-value">${stock}</td>
-          <td>${provider}</td>
-          <td>
-            <div class="stock-controls">
-              <button class="btn-decrement">-</button>
-              <button class="btn-increment">+</button>
-              <button class="btn-edit">✏️</button>
-              <button class="btn-delete">🗑️</button>
-            </div>
-          </td>
-        `;
-
-          tbody.appendChild(newRow);
-
-          // Añadir event listeners a los nuevos botones
-          const decrementBtn = newRow.querySelector(".btn-decrement");
-          const incrementBtn = newRow.querySelector(".btn-increment");
-          const editBtn = newRow.querySelector(".btn-edit");
-          const deleteBtn = newRow.querySelector(".btn-delete");
-
-          decrementBtn.addEventListener("click", function () {
-            const stockCell = newRow.querySelector(".stock-value");
-            let currentStock = parseInt(stockCell.textContent);
-
-            if (currentStock > 0) {
-              stockCell.textContent = currentStock - 1;
-              updateStockWarningClass(newRow, currentStock - 1);
-            }
-          });
-
-          incrementBtn.addEventListener("click", function () {
-            const stockCell = newRow.querySelector(".stock-value");
-            let currentStock = parseInt(stockCell.textContent);
-            stockCell.textContent = currentStock + 1;
-            updateStockWarningClass(newRow, currentStock + 1);
-          });
-
-          // Añadir eventos para botones de editar y eliminar en el nuevo producto
-          editBtn.addEventListener("click", function () {
-            const cells = newRow.cells;
-
-            const currentName = cells[0].textContent;
-            const currentCategory = cells[1].textContent;
-            const currentStock = parseInt(cells[2].textContent);
-            const currentProvider = cells[3].textContent;
-
-            const newName = prompt("Editar nombre del producto:", currentName);
-            if (!newName) return;
-
-            const newCategory = prompt("Editar categoría:", currentCategory);
-            if (!newCategory) return;
-
-            const newStock = parseInt(
-              prompt("Editar cantidad de stock:", currentStock)
-            );
-            if (isNaN(newStock)) return;
-
-            const newProvider = prompt("Editar proveedor:", currentProvider);
-            if (!newProvider) return;
-
-            cells[0].textContent = newName;
-            cells[1].textContent = newCategory;
-            cells[2].textContent = newStock;
-            cells[3].textContent = newProvider;
-
-            updateStockWarningClass(newRow, newStock);
-
-            alert(`El producto ha sido actualizado correctamente.`);
-          });
-
-          deleteBtn.addEventListener("click", function () {
-            if (
-              confirm(
-                `¿Estás seguro de eliminar "${productName}" del inventario?`
-              )
-            ) {
-              newRow.style.transition = "opacity 0.5s";
-              newRow.style.opacity = "0";
-
-              setTimeout(() => {
-                newRow.remove();
-                alert(
-                  `El producto "${productName}" ha sido eliminado del inventario.`
-                );
-              }, 500);
-            }
-          });
-
-          alert("Producto agregado correctamente");
         });
+      });
+
+      // Funcionalidad para agregar nuevo producto
+      document.getElementById("btn-add-product").addEventListener("click", function () {
+        alert("Función de agregar producto en desarrollo.");
+      });
+
+      // Funcionalidad para guardar cambios
+      document.getElementById("btn-save-changes").addEventListener("click", function () {
+        alert("Función de guardar cambios en desarrollo.");
+      });
     </script>
   </body>
 </html>

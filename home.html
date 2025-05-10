@@ -110,14 +110,15 @@
       body: JSON.stringify({ usuario, contrasena })
     });
 
-    // Intentamos parsear solo si es JSON válido
+
     const contentType = res.headers.get("content-type");
     if (contentType && contentType.includes("application/json")) {
       const data = await res.json();
 
       if (data.success) {
+        localStorage.setItem('usuarioLogueado', usuario); 
         alert('Login exitoso');
-        window.location.href = "stock.html";
+        window.location.href = "stock.html";      
       } else {
         alert('Credenciales incorrectas');
       }

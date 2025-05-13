@@ -106,7 +106,7 @@ document
 
 
 document.addEventListener("DOMContentLoaded", function () {
-  fetch("http://54.197.46.233:3000/api/productos")
+  fetch("http://52.20.1.18.233:3000/api/productos")
     .then((response) => response.json())
     .then((productos) => {
       const tbody = document.querySelector("#stock-table tbody");

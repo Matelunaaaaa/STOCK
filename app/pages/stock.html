@@ -1,37 +1,32 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Módulo de Stock</title>
-    <link rel="stylesheet" href="../css/styles.css" />
-  </head>
-  <body>
-    <header>
-      <h1>Gestión de Stock</h1>
-    </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gestión de Stock</title>
+  <link rel="stylesheet" href="../css/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Gestión de Stock</h1>
+    <button onclick="cerrarSesion()">Cerrar sesión</button>
+  </header>
 
-    <nav>
-      <button onclick="cerrarSesion()">Cerrar sesión</button>
-    </nav>
+  <main>
+    <section class="search-bar">
+      <input
+        type="text"
+        id="product-search"
+        placeholder="Buscar producto por nombre"
+      />
+      <button id="btn-search">Buscar</button>
+    </section>
 
-    <div class="container">
-      <div class="search-bar">
-        <div class="search-input">
-          <label for="product-search">Buscar por nombre:</label>
-          <input
-            type="text"
-            id="product-search"
-            placeholder="Nombre del producto..."
-          />
-        </div>
-        <button class="search-button" id="btn-search">Buscar</button>
-      </div>
-
+    <section class="stock-table-section">
       <table id="stock-table">
         <thead>
           <tr>
-            <th>Nombre del Producto</th>
+            <th>Nombre</th>
             <th>Categoría</th>
             <th>Stock</th>
             <th>Proveedor</th>
@@ -39,138 +34,17 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Laptop HP Pavilion 15</td>
-            <td>Laptops</td>
-            <td class="stock-value">12</td>
-            <td>HP Chile</td>
-            <td>
-              <div class="stock-controls">
-                <button class="btn-decrement">-</button>
-                <button class="btn-increment">+</button>
-                <button class="btn-edit">✏️</button>
-                <button class="btn-delete">🗑️</button>
-              </div>
-            </td>
-          </tr>
-          <tr class="stock-warning">
-            <td>Monitor LG UltraGear 27"</td>
-            <td>Periféricos</td>
-            <td class="stock-value">5</td>
-            <td>Distribuidora LG</td>
-            <td>
-              <div class="stock-controls">
-                <button class="btn-decrement">-</button>
-                <button class="btn-increment">+</button>
-                <button class="btn-edit">✏️</button>
-                <button class="btn-delete">🗑️</button>
-              </div>
-            </td>
-          </tr>
-          <tr class="stock-critical">
-            <td>Tarjeta Gráfica NVIDIA RTX 3060</td>
-            <td>Componentes</td>
-            <td class="stock-value">2</td>
-            <td>TechImport</td>
-            <td>
-              <div class="stock-controls">
-                <button class="btn-decrement">-</button>
-                <button class="btn-increment">+</button>
-                <button class="btn-edit">✏️</button>
-                <button class="btn-delete">🗑️</button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>Teclado Mecánico Logitech G Pro</td>
-            <td>Periféricos</td>
-            <td class="stock-value">15</td>
-            <td>Logitech Chile</td>
-            <td>
-              <div class="stock-controls">
-                <button class="btn-decrement">-</button>
-                <button class="btn-increment">+</button>
-                <button class="btn-edit">✏️</button>
-                <button class="btn-delete">🗑️</button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>Disco SSD Kingston 480GB</td>
-            <td>Componentes</td>
-            <td class="stock-value">23</td>
-            <td>Importadora Kingston</td>
-            <td>
-              <div class="stock-controls">
-                <button class="btn-decrement">-</button>
-                <button class="btn-increment">+</button>
-                <button class="btn-edit">✏️</button>
-                <button class="btn-delete">🗑️</button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>Memoria RAM Corsair 16GB DDR4</td>
-            <td>Componentes</td>
-            <td class="stock-value">18</td>
-            <td>TechImport</td>
-            <td>
-              <div class="stock-controls">
-                <button class="btn-decrement">-</button>
-                <button class="btn-increment">+</button>
-                <button class="btn-edit">✏️</button>
-                <button class="btn-delete">🗑️</button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>Mouse Inalámbrico Logitech MX</td>
-            <td>Periféricos</td>
-            <td class="stock-value">9</td>
-            <td>Logitech Chile</td>
-            <td>
-              <div class="stock-controls">
-                <button class="btn-decrement">-</button>
-                <button class="btn-increment">+</button>
-                <button class="btn-edit">✏️</button>
-                <button class="btn-delete">🗑️</button>
-              </div>
-            </td>
-          </tr>
-          <tr class="stock-warning">
-            <td>Impresora HP LaserJet Pro</td>
-            <td>Periféricos</td>
-            <td class="stock-value">4</td>
-            <td>HP Chile</td>
-            <td>
-              <div class="stock-controls">
-                <button class="btn-decrement">-</button>
-                <button class="btn-increment">+</button>
-                <button class="btn-edit">✏️</button>
-                <button class="btn-delete">🗑️</button>
-              </div>
-            </td>
-          </tr>
+          <!-- Los productos se insertan dinámicamente desde JS -->
         </tbody>
       </table>
+    </section>
 
-      <div style="text-align: right; margin-top: 20px">
-        <button id="btn-add-product" class="search-button">
-          Agregar Producto
-        </button>
-        <button id="btn-save-changes" class="search-button">
-          Guardar Cambios
-        </button>
-      </div>
-    </div>
+    <section class="stock-actions">
+      <button id="btn-add-product">Agregar nuevo producto</button>
+      <button id="btn-save-changes">Guardar cambios</button>
+    </section>
+  </main>
 
-    <footer>
-      <p>
-        &copy; 2025 Stock - Sistema de Inventario. Todos los derechos
-        reservados.
-      </p>
-    </footer>
-
-    <script src="../js/stock.js"></script>
-  </body>
+  <script src="../js/stock.js"></script>
+</body>
 </html>

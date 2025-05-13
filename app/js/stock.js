@@ -1,5 +1,3 @@
-// stock.js
-// Verificar si el usuario está logueado
 if (!localStorage.getItem("usuarioLogueado")) {
   window.location.href = "home.html"; // redirige al login si no inició sesión
 }
@@ -105,3 +103,78 @@ document
   .addEventListener("click", function () {
     alert("Función de guardar cambios en desarrollo.");
   });
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  fetch("http://localhost:3000/api/productos")
+    .then((response) => response.json())
+    .then((productos) => {
+      const tbody = document.querySelector("#stock-table tbody");
+      tbody.innerHTML = ""; // limpiar por si acaso
+
+      productos.forEach((producto) => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+          <td>${producto.nombre}</td>
+          <td>${producto.categoria}</td>
+          <td class="stock-value">${producto.stock}</td>
+          <td>${producto.proveedor}</td>
+          <td>
+            <button class="btn-edit">Editar</button>
+            <button class="btn-delete">Eliminar</button>
+            <button class="btn-increment">+</button>
+            <button class="btn-decrement">-</button>
+          </td>
+        `;
+
+        // Aplicar clase de advertencia si aplica
+        updateStockWarningClass(row, producto.stock);
+        tbody.appendChild(row);
+      });
+
+      // Reasignar eventos a los botones nuevos
+      assignRowEventListeners();
+    })
+    .catch((error) => {
+      console.error("Error al obtener los productos:", error);
+    });
+});
+
+function assignRowEventListeners() {
+  document.querySelectorAll(".btn-increment").forEach((button) => {
+    button.addEventListener("click", function () {
+      const row = this.closest("tr");
+      const stockCell = row.querySelector(".stock-value");
+      let currentStock = parseInt(stockCell.textContent);
+      stockCell.textContent = currentStock + 1;
+      updateStockWarningClass(row, currentStock + 1);
+    });
+  });
+
+  document.querySelectorAll(".btn-decrement").forEach((button) => {
+    button.addEventListener("click", function () {
+      const row = this.closest("tr");
+      const stockCell = row.querySelector(".stock-value");
+      let currentStock = parseInt(stockCell.textContent);
+      if (currentStock > 0) {
+        stockCell.textContent = currentStock - 1;
+        updateStockWarningClass(row, currentStock - 1);
+      }
+    });
+  });
+
+  document.querySelectorAll(".btn-edit").forEach((button) => {
+    button.addEventListener("click", function () {
+      alert("Función de edición en desarrollo.");
+    });
+  });
+
+  document.querySelectorAll(".btn-delete").forEach((button) => {
+    button.addEventListener("click", function () {
+      if (confirm("¿Está seguro de que desea eliminar este producto?")) {
+        this.closest("tr").remove();
+      }
+    });
+  });
+}

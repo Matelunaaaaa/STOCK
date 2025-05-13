@@ -106,11 +106,11 @@ document
 
 
 document.addEventListener("DOMContentLoaded", function () {
-  fetch("http://localhost:3000/api/productos")
+  fetch("http://54.197.46.233:3000/api/productos")
     .then((response) => response.json())
     .then((productos) => {
       const tbody = document.querySelector("#stock-table tbody");
-      tbody.innerHTML = ""; // limpiar por si acaso
+      tbody.innerHTML = "";
 
       productos.forEach((producto) => {
         const row = document.createElement("tr");

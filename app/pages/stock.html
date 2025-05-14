@@ -1,50 +1,51 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Gestión de Stock</title>
-  <link rel="stylesheet" href="../css/styles.css" />
-</head>
-<body>
-  <header>
-    <h1>Gestión de Stock</h1>
-    <button onclick="cerrarSesion()">Cerrar sesión</button>
-  </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión de Stock</title>
+    <link rel="stylesheet" href="../css/styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Gestión de Stock</h1>
+      <button onclick="cerrarSesion()">Cerrar sesión</button>
+    </header>
 
-  <main>
-    <section class="search-bar">
-      <input
-        type="text"
-        id="product-search"
-        placeholder="Buscar producto por nombre"
-      />
-      <button id="btn-search">Buscar</button>
-    </section>
+    <main>
+      <section class="search-bar">
+        <input
+          type="text"
+          class="search-input"
+          id="product-search"
+          placeholder="Buscar producto por nombre"
+        />
+        <button class="search-button" id="btn-search">Buscar</button>
+      </section>
 
-    <section class="stock-table-section">
-      <table id="stock-table">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Categoría</th>
-            <th>Stock</th>
-            <th>Proveedor</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Los productos se insertan dinámicamente desde JS -->
-        </tbody>
-      </table>
-    </section>
+      <section class="stock-table-section">
+        <table id="stock-table">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Categoría</th>
+              <th>Stock</th>
+              <th>Proveedor</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Los productos se insertan dinámicamente desde JS -->
+          </tbody>
+        </table>
+      </section>
 
-    <section class="stock-actions">
-      <button id="btn-add-product">Agregar nuevo producto</button>
-      <button id="btn-save-changes">Guardar cambios</button>
-    </section>
-  </main>
+      <section class="stock-actions">
+        <button id="btn-add-product">Agregar nuevo producto</button>
+        <button id="btn-save-changes">Guardar cambios</button>
+      </section>
+    </main>
 
-  <script src="../js/stock.js"></script>
-</body>
+    <script src="../js/stock.js"></script>
+  </body>
 </html>

@@ -8,6 +8,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  box-sizing: border-box;
 }
 
 .login-container {
@@ -28,6 +29,8 @@ body {
 }
 
 .form-group {
+  display: flex;
+  flex-direction: column;
   margin-bottom: 1.2rem;
   text-align: left;
 }
@@ -40,7 +43,6 @@ body {
 }
 
 .form-group input {
-  width: 100%;
   padding: 0.7rem;
   border: 2px solid #f9a8d4;
   border-radius: 10px;

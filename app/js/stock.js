@@ -106,9 +106,18 @@ document
 
 
 document.addEventListener("DOMContentLoaded", function () {
-  fetch("http://52.20.1.18.233:3000/api/productos")
-    .then((response) => response.json())
+  const url = "http://52.20.1.18:3000/api/productos";
+  console.log("Haciendo fetch a la URL:", url);
+
+  fetch(url)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Error HTTP: ${response.status}`);
+      }
+      return response.json();
+    })
     .then((productos) => {
+      console.log("Productos obtenidos:", productos); // Para verificar que la información está llegando correctamente
       const tbody = document.querySelector("#stock-table tbody");
       tbody.innerHTML = "";
 

@@ -4,8 +4,16 @@ if (!localStorage.getItem("usuarioLogueado")) {
 
 // Funcionalidad para cerrar sesión
 function cerrarSesion() {
-  localStorage.removeItem("usuarioLogueado"); // eliminar el usuario logueado
-  window.location.href = "home.html"; // redirigir al login
+  fetch('/logout', {
+    method: 'POST',
+    credentials: 'include'
+  })
+    .then(() => {
+      window.location.href = "home.html";
+    })
+    .catch(() => {
+      window.location.href = "home.html";
+    });
 }
 
 // Funcionalidad para filtrar productos por nombre
@@ -104,12 +112,11 @@ document
     alert("Función de guardar cambios en desarrollo.");
   });
 
-
 document.addEventListener("DOMContentLoaded", function () {
   const url = "http://52.20.1.18:3000/api/productos";
   console.log("Haciendo fetch a la URL:", url);
 
-  fetch(url)
+  fetch(url, { credentials: 'include' })
     .then((response) => {
       if (!response.ok) {
         throw new Error(`Error HTTP: ${response.status}`);

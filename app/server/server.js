@@ -2,10 +2,18 @@ const express = require('express');
 const mysql = require('mysql');
 const cors = require('cors');
 const path = require('path');
+const session = require('express-session');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// Configuración de sesión
+app.use(session({
+  secret: 'clavesuperseguralol', 
+  resave: false,
+  saveUninitialized: false
+}));
 
 // Configuración de archivos estáticos
 app.use(express.static(path.join(__dirname, '..'))); // Raíz del proyecto
@@ -29,17 +37,26 @@ connection.connect(err => {
   }
 });
 
+// Middleware para proteger rutas
+function requireLogin(req, res, next) {
+  if (req.session && req.session.usuario) {
+    next();
+  } else {
+    res.redirect('/');
+  }
+}
+
 // Ruta principal - siempre redirige a home.html
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../pages/home.html'));
 });
 
-// Rutas para otras páginas
-app.get('/stock', (req, res) => {
+// Rutas protegidas
+app.get('/stock', requireLogin, (req, res) => {
   res.sendFile(path.join(__dirname, '../pages/stock.html'));
 });
 
-app.get('/asientoscontables', (req, res) => {
+app.get('/asientoscontables', requireLogin, (req, res) => {
   res.sendFile(path.join(__dirname, '../pages/asientoscontables.html'));
 });
 
@@ -51,18 +68,35 @@ app.post('/login', (req, res) => {
   connection.query(sql, [usuario, contrasena], (err, results) => {
     if (err) {
       console.error('Error login:', err);
-      return res.redirect('/'); // Redirige a home si hay error
+      return res.json({ success: false });
     }
-    res.json({ success: results.length > 0 });
+    if (results.length > 0) {
+      req.session.usuario = usuario;
+      res.json({ success: true });
+    } else {
+      res.json({ success: false });
+    }
   });
 });
 
-// API Productos
-app.get('/api/productos', (req, res) => {
+// API Logout mejorada
+app.post('/logout', (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      console.error('Error al destruir la sesión:', err);
+      return res.status(500).json({ success: false, message: 'Error al cerrar sesión' });
+    }
+    res.clearCookie('connect.sid');
+    res.json({ success: true });
+  });
+});
+
+// API Productos (protegida)
+app.get('/api/productos', requireLogin, (req, res) => {
   connection.query('SELECT * FROM productos', (err, results) => {
     if (err) {
       console.error('Error productos:', err);
-      return res.redirect('/'); // Redirige a home si hay error
+      return res.status(500).json({ error: 'Error en la base de datos' });
     }
     res.json(results);
   });
@@ -74,6 +108,7 @@ app.use((err, req, res, next) => {
   res.redirect('/');
 });
 
+// Rutas no definidas
 app.use((req, res) => {
   res.redirect('/'); // Cualquier ruta no definida va a home
 });

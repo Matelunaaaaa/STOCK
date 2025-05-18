@@ -92,7 +92,7 @@ app.post('/logout', (req, res) => {
 });
 
 // API Productos (protegida)
-app.get('/api/productos', requireLogin, (req, res) => {
+app.get('/api/productos', (req, res) => {
   connection.query('SELECT * FROM productos', (err, results) => {
     if (err) {
       console.error('Error productos:', err);

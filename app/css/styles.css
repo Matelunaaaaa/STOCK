@@ -436,3 +436,92 @@ footer {
     content: "Acciones";
   }
 }
+
+/* Estilos para la tabla de asientos contables */
+#asientosTable {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(249, 168, 212, 0.2);
+  margin-top: 30px;
+}
+
+#asientosTable th,
+#asientosTable td {
+  padding: 15px;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+#asientosTable th {
+  background-color: var(--primary-color);
+  color: white;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+#asientosTable tr:hover {
+  background-color: #fff0f7;
+}
+
+/* Opcional: Colores de advertencia para filas especiales (puedes usar clases si lo necesitas) */
+.asiento-warning {
+  background-color: var(--warning-color);
+}
+.asiento-alert {
+  background-color: var(--alert-color);
+  color: white;
+}
+.asiento-success {
+  background-color: var(--success-color);
+}
+
+/* Responsive para la tabla de asientos */
+@media (max-width: 768px) {
+  #asientosTable,
+  #asientosTable thead,
+  #asientosTable tbody,
+  #asientosTable th,
+  #asientosTable td,
+  #asientosTable tr {
+    display: block;
+  }
+
+  #asientosTable thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  #asientosTable tr {
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+  }
+
+  #asientosTable td {
+    border: none;
+    position: relative;
+    padding-left: 40%;
+  }
+
+  #asientosTable td::before {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 35%;
+    font-weight: 700;
+  }
+
+  #asientosTable td:nth-of-type(1):before {
+    content: "Fecha";
+  }
+  #asientosTable td:nth-of-type(2):before {
+    content: "Descripción";
+  }
+  #asientosTable td:nth-of-type(3):before {
+    content: "Referencia";
+  }
+}

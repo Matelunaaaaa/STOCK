@@ -17,7 +17,7 @@ async function login() {
       if (data.success) {
         localStorage.setItem("usuarioLogueado", usuario);
         alert("Login exitoso");
-        window.location.href = "stock.html";
+        window.location.href = "stock";
       } else {
         alert("Credenciales incorrectas");
       }

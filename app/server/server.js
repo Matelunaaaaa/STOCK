@@ -1,11 +1,19 @@
 const express = require('express');
 const mysql = require('mysql');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Configuración de archivos estáticos
+app.use(express.static(path.join(__dirname, '..'))); // Raíz del proyecto
+app.use('/js', express.static(path.join(__dirname, '../js'))); // JS
+app.use('/css', express.static(path.join(__dirname, '../css'))); // CSS
+app.use('/pages', express.static(path.join(__dirname, '../pages'))); // Páginas HTML
+
+// Conexión MySQL
 const connection = mysql.createConnection({
   host: '54.197.46.233',
   user: 'admin',
@@ -15,51 +23,63 @@ const connection = mysql.createConnection({
 
 connection.connect(err => {
   if (err) {
-    console.error('Error de conexión a MySQL:', err);
-    return;
+    console.error('Error MySQL:', err);
+  } else {
+    console.log('✅ MySQL conectado');
   }
-  console.log('Conexión exitosa a MySQL');
 });
 
+// Ruta principal - siempre redirige a home.html
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../pages/home.html'));
+});
+
+// Rutas para otras páginas
+app.get('/stock', (req, res) => {
+  res.sendFile(path.join(__dirname, '../pages/stock.html'));
+});
+
+app.get('/asientoscontables', (req, res) => {
+  res.sendFile(path.join(__dirname, '../pages/asientoscontables.html'));
+});
+
+// API Login
 app.post('/login', (req, res) => {
   const { usuario, contrasena } = req.body;
   const sql = 'SELECT * FROM usuarios WHERE usuario = ? AND contrasena = ?';
-
+  
   connection.query(sql, [usuario, contrasena], (err, results) => {
     if (err) {
-      console.error('Error al consultar la base de datos:', err);
-      return res.status(500).json({ success: false, message: 'Error en el servidor' });
+      console.error('Error login:', err);
+      return res.redirect('/'); // Redirige a home si hay error
     }
-
-    if (results.length > 0) {
-      res.json({ success: true, message: 'Inicio de sesión correcto' });
-    } else {
-      res.json({ success: false, message: 'Credenciales inválidas' });
-    }
+    res.json({ success: results.length > 0 });
   });
 });
 
+// API Productos
 app.get('/api/productos', (req, res) => {
-  const sql = 'SELECT id, nombre, categoria, stock, proveedor FROM productos';
-
-  connection.query(sql, (err, results) => {
+  connection.query('SELECT * FROM productos', (err, results) => {
     if (err) {
-      console.error('Error al obtener productos:', err);
-      return res.status(500).json({ error: 'Error al obtener productos' });
+      console.error('Error productos:', err);
+      return res.redirect('/'); // Redirige a home si hay error
     }
-
     res.json(results);
   });
 });
 
-app.use(express.static('pages'));
-
-// Ruta principal
-app.get('/', (req, res) => {
-  res.redirect('/home.html');
+// Manejo de errores - TODOS los errores redirigen a home.html
+app.use((err, req, res, next) => {
+  console.error('⚠️ Error:', err.message);
+  res.redirect('/');
 });
 
+app.use((req, res) => {
+  res.redirect('/'); // Cualquier ruta no definida va a home
+});
 
-app.listen(3000, '0.0.0.0',() => {
-  console.log('Servidor corriendo en puerto 3000');
+// Iniciar servidor
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`🚀 Servidor listo en http://localhost:${PORT}`);
 });

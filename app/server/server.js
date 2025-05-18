@@ -102,6 +102,18 @@ app.get('/api/productos', requireLogin, (req, res) => {
   });
 });
 
+// API Asientos contables (protegida)
+app.get('/api/asientos-proxy', async (req, res) => {
+  try {
+    const apiResponse = await fetch('http://34.225.192.85:8000/api/asientoscontables/');
+    const data = await apiResponse.json();
+    res.json(data);
+  } catch (error) {
+    console.error('Error en proxy:', error);
+    res.status(500).json({ error: 'Error al obtener asientos' });
+  }
+});
+
 // Manejo de errores - TODOS los errores redirigen a home.html
 app.use((err, req, res, next) => {
   console.error('⚠️ Error:', err.message);

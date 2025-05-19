@@ -93,6 +93,11 @@ document.getElementById("btn-add-product").addEventListener("click", function ()
   const stock = prompt("Stock inicial:");
   const proveedor = prompt("Proveedor:");
   if (nombre && categoria && stock && proveedor) {
+    if (isNaN(stock) || stock < 0) {
+      alert("El stock debe ser un número.");
+      return;
+    }
+    else {
     fetch("http://52.20.1.18:3000/api/productos", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -112,6 +117,7 @@ document.getElementById("btn-add-product").addEventListener("click", function ()
         alert("Error al agregar producto. Ver consola.");
         console.log(err);
       });
+    }
   }
 });
 

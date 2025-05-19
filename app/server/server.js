@@ -200,19 +200,19 @@ app.post('/api/productos', (req, res) => {
 //  });
 //});
 //
-//// Eliminar producto (API)
-//app.delete('/api/productos/:id', (req, res) => {
-//  const { id } = req.params;
-//  const sql = 'DELETE FROM productos WHERE id = ?';
-//  connection.query(sql, [id], (err, result) => {
-//    if (err) {
-//      console.error('Error al eliminar producto:', err);
-//      return res.status(500).json({ error: 'Error al eliminar producto' });
-//    }
-//    res.json({ success: true });
-//  });
-//});
-//
+// Eliminar producto (API)
+app.delete('/api/productos/:id', (req, res) => {
+  const { id } = req.params;
+  const sql = 'DELETE FROM productos WHERE id = ?';
+  connection.query(sql, [id], (err, result) => {
+    if (err) {
+      console.error('Error al eliminar producto:', err);
+      return res.status(500).json({ error: 'Error al eliminar producto' });
+    }
+    res.json({ success: true });
+  });
+});
+
 
 
 // API Asientos contables 

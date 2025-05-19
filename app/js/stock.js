@@ -1,5 +1,5 @@
 if (!localStorage.getItem("usuarioLogueado")) {
-  window.location.href = "home.html"; // redirige al login si no inició sesión
+  window.location.href = "home.html";
 }
 
 // Funcionalidad para cerrar sesión
@@ -16,107 +16,26 @@ function cerrarSesion() {
     });
 }
 
-// Funcionalidad para filtrar productos por nombre
+// Buscar productos por nombre
 document.getElementById("btn-search").addEventListener("click", function () {
-  const searchTerm = document
-    .getElementById("product-search")
-    .value.toLowerCase();
+  const searchTerm = document.getElementById("product-search").value.toLowerCase();
   const rows = document.querySelectorAll("#stock-table tbody tr");
-
   rows.forEach((row) => {
     const productName = row.cells[0].textContent.toLowerCase();
-    if (productName.includes(searchTerm)) {
-      row.style.display = "";
-    } else {
-      row.style.display = "none";
-    }
+    row.style.display = productName.includes(searchTerm) ? "" : "none";
   });
 });
 
-// También filtrar al presionar Enter en el campo de búsqueda
-document
-  .getElementById("product-search")
-  .addEventListener("keyup", function (event) {
-    if (event.key === "Enter") {
-      document.getElementById("btn-search").click();
-    }
-  });
-
-// Funcionalidad para incrementar stock
-document.querySelectorAll(".btn-increment").forEach((button) => {
-  button.addEventListener("click", function () {
-    const row = this.closest("tr");
-    const stockCell = row.querySelector(".stock-value");
-    let currentStock = parseInt(stockCell.textContent);
-    stockCell.textContent = currentStock + 1;
-
-    // Actualizar clases de advertencia basadas en el nuevo valor de stock
-    updateStockWarningClass(row, currentStock + 1);
-  });
-});
-
-// Funcionalidad para decrementar stock
-document.querySelectorAll(".btn-decrement").forEach((button) => {
-  button.addEventListener("click", function () {
-    const row = this.closest("tr");
-    const stockCell = row.querySelector(".stock-value");
-    let currentStock = parseInt(stockCell.textContent);
-
-    if (currentStock > 0) {
-      stockCell.textContent = currentStock - 1;
-
-      // Actualizar clases de advertencia basadas en el nuevo valor de stock
-      updateStockWarningClass(row, currentStock - 1);
-    }
-  });
-});
-
-// Función para actualizar las clases de advertencia de stock
-function updateStockWarningClass(row, stockValue) {
-  row.classList.remove("stock-warning", "stock-critical");
-
-  if (stockValue <= 2) {
-    row.classList.add("stock-critical");
-  } else if (stockValue <= 5) {
-    row.classList.add("stock-warning");
+// Buscar al presionar Enter
+document.getElementById("product-search").addEventListener("keyup", function (event) {
+  if (event.key === "Enter") {
+    document.getElementById("btn-search").click();
   }
-}
-
-// Funcionalidad para editar producto
-document.querySelectorAll(".btn-edit").forEach((button) => {
-  button.addEventListener("click", function () {
-    alert("Función de edición en desarrollo.");
-  });
 });
-
-// Funcionalidad para eliminar producto
-document.querySelectorAll(".btn-delete").forEach((button) => {
-  button.addEventListener("click", function () {
-    if (confirm("¿Está seguro de que desea eliminar este producto?")) {
-      this.closest("tr").remove();
-    }
-  });
-});
-
-// Funcionalidad para agregar nuevo producto
-document
-  .getElementById("btn-add-product")
-  .addEventListener("click", function () {
-    alert("Función de agregar producto en desarrollo.");
-  });
-
-// Funcionalidad para guardar cambios
-document
-  .getElementById("btn-save-changes")
-  .addEventListener("click", function () {
-    alert("Función de guardar cambios en desarrollo.");
-  });
 
 document.addEventListener("DOMContentLoaded", function () {
   const url = "http://52.20.1.18:3000/api/productos";
-  console.log("Haciendo fetch a la URL:", url);
-
-  fetch(url, { credentials: 'include' })
+  fetch(url)
     .then((response) => {
       if (!response.ok) {
         throw new Error(`Error HTTP: ${response.status}`);
@@ -124,14 +43,16 @@ document.addEventListener("DOMContentLoaded", function () {
       return response.json();
     })
     .then((productos) => {
-      console.log("Productos obtenidos:", productos); // Para verificar que la información está llegando correctamente
+      console.log("Productos obtenidos:", productos);
       const tbody = document.querySelector("#stock-table tbody");
       tbody.innerHTML = "";
 
       productos.forEach((producto) => {
         const row = document.createElement("tr");
+        row.setAttribute("data-id", producto.id);
 
         row.innerHTML = `
+          <td>${producto.id}</td>
           <td>${producto.nombre}</td>
           <td>${producto.categoria}</td>
           <td class="stock-value">${producto.stock}</td>
@@ -139,17 +60,13 @@ document.addEventListener("DOMContentLoaded", function () {
           <td>
             <button class="btn-edit">Editar</button>
             <button class="btn-delete">Eliminar</button>
-            <button class="btn-increment">+</button>
-            <button class="btn-decrement">-</button>
           </td>
         `;
 
-        // Aplicar clase de advertencia si aplica
         updateStockWarningClass(row, producto.stock);
         tbody.appendChild(row);
       });
 
-      // Reasignar eventos a los botones nuevos
       assignRowEventListeners();
     })
     .catch((error) => {
@@ -157,40 +74,95 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+// Agregar nuevo producto
+document.getElementById("btn-add-product").addEventListener("click", function () {
+  const nombre = prompt("Nombre del producto:");
+  const categoria = prompt("Categoría:");
+  const stock = prompt("Stock inicial:");
+  const proveedor = prompt("Proveedor:");
+  if (nombre && categoria && stock && proveedor) {
+    fetch("http://52.20.1.18:3000/api/productos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nombre, categoria, stock: parseInt(stock), proveedor }),
+    })
+      .then(async (res) => {
+        if (!res.ok) {
+          const text = await res.text();
+          console.error("Respuesta del servidor (error):", res.status, text);
+          throw new Error("No se pudo agregar el producto.");
+        }
+        return res.json();
+      })
+      .then(() => location.reload())
+      .catch(err => {
+        alert("Error al agregar producto. Ver consola.");
+        console.error(err);
+      });
+  }
+});
+
+
+// Guardar cambios (solo recarga)
+document.getElementById("btn-save-changes").addEventListener("click", function () {
+  alert("Todos los cambios se guardan automáticamente.");
+  location.reload();
+});
+
 function assignRowEventListeners() {
-  document.querySelectorAll(".btn-increment").forEach((button) => {
-    button.addEventListener("click", function () {
-      const row = this.closest("tr");
-      const stockCell = row.querySelector(".stock-value");
-      let currentStock = parseInt(stockCell.textContent);
-      stockCell.textContent = currentStock + 1;
-      updateStockWarningClass(row, currentStock + 1);
-    });
-  });
-
-  document.querySelectorAll(".btn-decrement").forEach((button) => {
-    button.addEventListener("click", function () {
-      const row = this.closest("tr");
-      const stockCell = row.querySelector(".stock-value");
-      let currentStock = parseInt(stockCell.textContent);
-      if (currentStock > 0) {
-        stockCell.textContent = currentStock - 1;
-        updateStockWarningClass(row, currentStock - 1);
-      }
-    });
-  });
-
+  // Editar producto
   document.querySelectorAll(".btn-edit").forEach((button) => {
     button.addEventListener("click", function () {
-      alert("Función de edición en desarrollo.");
-    });
-  });
+      const row = this.closest("tr");
+      const id = row.getAttribute("data-id");
+      if (!id) {
+        alert("Error: No se encontró el ID del producto.");
+        return;
+      }
+      // Cambia los índices para que NO se edite el ID
+      const nombre = prompt("Nuevo nombre:", row.cells[1].textContent);
+      const categoria = prompt("Nueva categoría:", row.cells[2].textContent);
+      const stock = prompt("Nuevo stock:", row.cells[3].textContent);
+      const proveedor = prompt("Nuevo proveedor:", row.cells[4].textContent);
 
-  document.querySelectorAll(".btn-delete").forEach((button) => {
-    button.addEventListener("click", function () {
-      if (confirm("¿Está seguro de que desea eliminar este producto?")) {
-        this.closest("tr").remove();
+      if (nombre && categoria && stock && proveedor) {
+        fetch(`http://52.20.1.18:3000/api/productos/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nombre, categoria, stock: parseInt(stock), proveedor }),
+        })
+          .then((res) => res.json())
+          .then(() => location.reload());
       }
     });
   });
+
+  // Eliminar producto
+  document.querySelectorAll(".btn-delete").forEach((button) => {
+    button.addEventListener("click", function () {
+      const row = this.closest("tr");
+      const id = row.getAttribute("data-id");
+      if (!id) {
+        alert("Error: No se encontró el ID del producto.");
+        return;
+      }
+      if (confirm("¿Está seguro de que desea eliminar este producto?")) {
+        fetch(`http://52.20.1.18:3000/api/productos/${id}`, {
+          method: "DELETE",
+        })
+          .then((res) => res.json())
+          .then(() => location.reload());
+      }
+    });
+  });
+}
+
+// Colorea filas según stock
+function updateStockWarningClass(row, stockValue) {
+  row.classList.remove("stock-warning", "stock-critical");
+  if (stockValue <= 2) {
+    row.classList.add("stock-critical");
+  } else if (stockValue <= 5) {
+    row.classList.add("stock-warning");
+  }
 }

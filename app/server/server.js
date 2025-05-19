@@ -3,23 +3,29 @@ const mysql = require('mysql');
 const cors = require('cors');
 const path = require('path');
 const session = require('express-session');
+const fetch = require('node-fetch'); 
 
 const app = express();
-app.use(cors());
+
+// Configura CORS para permitir credenciales (cookies de sesión)
+app.use(cors({
+  origin: 'http://52.20.1.18:3000', 
+  credentials: true
+}));
+
 app.use(express.json());
 
-// Configuración de sesión
 app.use(session({
-  secret: 'clavesuperseguralol', 
+  secret: 'clavesuperseguralol',
   resave: false,
   saveUninitialized: false
 }));
 
 // Configuración de archivos estáticos
-app.use(express.static(path.join(__dirname, '..'))); // Raíz del proyecto
-app.use('/js', express.static(path.join(__dirname, '../js'))); // JS
-app.use('/css', express.static(path.join(__dirname, '../css'))); // CSS
-app.use('/pages', express.static(path.join(__dirname, '../pages'))); // Páginas HTML
+app.use(express.static(path.join(__dirname, '..')));
+app.use('/js', express.static(path.join(__dirname, '../js')));
+app.use('/css', express.static(path.join(__dirname, '../css')));
+app.use('/pages', express.static(path.join(__dirname, '../pages')));
 
 // Conexión MySQL
 const connection = mysql.createConnection({
@@ -37,34 +43,12 @@ connection.connect(err => {
   }
 });
 
-// Middleware para proteger rutas
-function requireLogin(req, res, next) {
-  if (req.session && req.session.usuario) {
-    next();
-  } else {
-    res.redirect('/');
-  }
-}
-
-// Ruta principal - siempre redirige a home.html
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../pages/home.html'));
-});
-
-// Rutas protegidas
-app.get('/stock', requireLogin, (req, res) => {
-  res.sendFile(path.join(__dirname, '../pages/stock.html'));
-});
-
-app.get('/asientoscontables', requireLogin, (req, res) => {
-  res.sendFile(path.join(__dirname, '../pages/asientoscontables.html'));
-});
+// ================== RUTAS DE API (PÚBLICAS) ==================
 
 // API Login
 app.post('/login', (req, res) => {
   const { usuario, contrasena } = req.body;
   const sql = 'SELECT * FROM usuarios WHERE usuario = ? AND contrasena = ?';
-  
   connection.query(sql, [usuario, contrasena], (err, results) => {
     if (err) {
       console.error('Error login:', err);
@@ -79,7 +63,7 @@ app.post('/login', (req, res) => {
   });
 });
 
-// API Logout mejorada
+// API Logout
 app.post('/logout', (req, res) => {
   req.session.destroy(err => {
     if (err) {
@@ -91,7 +75,7 @@ app.post('/logout', (req, res) => {
   });
 });
 
-// API Productos (protegida)
+// API Productos
 app.get('/api/productos', (req, res) => {
   connection.query('SELECT * FROM productos', (err, results) => {
     if (err) {
@@ -102,7 +86,47 @@ app.get('/api/productos', (req, res) => {
   });
 });
 
-// API Asientos contables (protegida)
+// Agregar producto
+app.post('/api/productos', (req, res) => {
+  const { nombre, categoria, stock, proveedor } = req.body;
+  const sql = 'INSERT INTO productos (nombre, categoria, stock, proveedor) VALUES (?, ?, ?, ?)';
+  connection.query(sql, [nombre, categoria, stock, proveedor], (err, result) => {
+    if (err) {
+      console.error('Error al agregar producto:', err);
+      return res.status(500).json({ error: 'Error al agregar producto' });
+    }
+    res.json({ success: true, id: result.insertId });
+  });
+});
+
+// Actualizar producto
+app.put('/api/productos/:id', (req, res) => {
+  const { id } = req.params;
+  const { nombre, categoria, stock, proveedor } = req.body;
+  const sql = 'UPDATE productos SET nombre = ?, categoria = ?, stock = ?, proveedor = ? WHERE id = ?';
+  connection.query(sql, [nombre, categoria, stock, proveedor, id], (err, result) => {
+    if (err) {
+      console.error('Error al actualizar producto:', err);
+      return res.status(500).json({ error: 'Error al actualizar producto' });
+    }
+    res.json({ success: true });
+  });
+});
+
+// Eliminar producto
+app.delete('/api/productos/:id', (req, res) => {
+  const { id } = req.params;
+  const sql = 'DELETE FROM productos WHERE id = ?';
+  connection.query(sql, [id], (err, result) => {
+    if (err) {
+      console.error('Error al eliminar producto:', err);
+      return res.status(500).json({ error: 'Error al eliminar producto' });
+    }
+    res.json({ success: true });
+  });
+});
+
+// API Asientos contables 
 app.get('/api/asientos-proxy', async (req, res) => {
   try {
     const apiResponse = await fetch('http://34.225.192.85:8000/api/asientoscontables/');
@@ -114,15 +138,47 @@ app.get('/api/asientos-proxy', async (req, res) => {
   }
 });
 
-// Manejo de errores - TODOS los errores redirigen a home.html
-app.use((err, req, res, next) => {
-  console.error('⚠️ Error:', err.message);
+// Manejador para rutas de API que no existen
+app.use('/api', (req, res) => {
+  res.status(404).json({ error: 'API endpoint not found' });
+});
+
+// ================== FIN RUTAS DE API ==================
+
+// Middleware para proteger rutas
+function requireLogin(req, res, next) {
+  if (req.session && req.session.usuario) {
+    next();
+  } else {
+    res.redirect('/');
+  }
+}
+
+// Rutas frontend
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../pages/home.html'));
+});
+
+// Rutas protegidas
+app.get('/stock', requireLogin, (req, res) => {
+  res.sendFile(path.join(__dirname, '../pages/stock.html'));
+});
+
+app.get('/asientoscontables', requireLogin, (req, res) => {
+  res.sendFile(path.join(__dirname, '../pages/asientoscontables.html'));
+});
+
+app.use((req, res, next) => {
+  if (req.headers.accept && req.headers.accept.includes('application/json')) {
+    return res.status(404).json({ error: 'Ruta no encontrada' });
+  }
   res.redirect('/');
 });
 
-// Rutas no definidas
-app.use((req, res) => {
-  res.redirect('/'); // Cualquier ruta no definida va a home
+// Manejador de errores generales
+app.use((err, req, res, next) => {
+  console.error('⚠️ Error:', err.message);
+  res.status(500).send('Error interno del servidor');
 });
 
 // Iniciar servidor

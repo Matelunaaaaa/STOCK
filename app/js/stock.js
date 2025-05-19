@@ -123,7 +123,6 @@ document.getElementById("btn-add-product").addEventListener("click", function ()
 
 // Guardar cambios (solo recarga)
 document.getElementById("btn-save-changes").addEventListener("click", function () {
-  alert("Todos los cambios se guardan automáticamente.");
   location.reload();
 });
 

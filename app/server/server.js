@@ -186,20 +186,22 @@ app.post('/api/productos', (req, res) => {
   });
 });
 
-//// Actualizar producto (API)
-//app.put('/api/productos/:id', (req, res) => {
-//  const { id } = req.params;
-//  const { nombre, categoria, stock, proveedor } = req.body;
-//  const sql = 'UPDATE productos SET nombre = ?, categoria = ?, stock = ?, proveedor = ? WHERE id = ?';
-//  connection.query(sql, [nombre, categoria, stock, proveedor, id], (err, result) => {
-//    if (err) {
-//      console.error('Error al actualizar producto:', err);
-//      return res.status(500).json({ error: 'Error al actualizar producto' });
-//    }
-//    res.json({ success: true });
-//  });
-//});
-//
+// Actualizar producto (API)
+app.put('/api/productos/:id', (req, res) => {
+  const { id } = req.params;
+  const { nombre, categoria, stock, proveedor } = req.body;
+  const sql = 'UPDATE productos SET nombre = ?, categoria = ?, stock = ?, proveedor = ? WHERE id = ?';
+  connection.query(sql, [nombre, categoria, stock, proveedor, id], (err, result) => {
+    if (err) {
+      console.error('Error al actualizar producto:', err);
+      return res.status(500).json({ error: 'Error al actualizar producto' });
+    }
+    res.json({ success: true });
+  });
+});
+
+
+
 // Eliminar producto (API)
 app.delete('/api/productos/:id', (req, res) => {
   const { id } = req.params;

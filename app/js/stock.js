@@ -74,6 +74,18 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+// Colorea filas según stock
+function updateStockWarningClass(row, stockValue) {
+  row.classList.remove("stock-warning", "stock-critical");
+  if (stockValue <= 2) {
+    row.classList.add("stock-critical");
+  } else if (stockValue <= 5) {
+    row.classList.add("stock-warning");
+  }
+}
+
+// ================== FUNCIONALIDAD DE BOTONES ==================
+
 // Agregar nuevo producto
 document.getElementById("btn-add-product").addEventListener("click", function () {
   const nombre = prompt("Nombre del producto:");
@@ -84,6 +96,7 @@ document.getElementById("btn-add-product").addEventListener("click", function ()
     fetch("http://52.20.1.18:3000/api/productos", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      credentials: "include",
       body: JSON.stringify({ nombre, categoria, stock: parseInt(stock), proveedor }),
     })
       .then(async (res) => {
@@ -97,11 +110,10 @@ document.getElementById("btn-add-product").addEventListener("click", function ()
       .then(() => location.reload())
       .catch(err => {
         alert("Error al agregar producto. Ver consola.");
-        console.error(err);
+        console.log(err);
       });
   }
 });
-
 
 // Guardar cambios (solo recarga)
 document.getElementById("btn-save-changes").addEventListener("click", function () {
@@ -129,6 +141,7 @@ function assignRowEventListeners() {
         fetch(`http://52.20.1.18:3000/api/productos/${id}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
+          credentials: "include",
           body: JSON.stringify({ nombre, categoria, stock: parseInt(stock), proveedor }),
         })
           .then((res) => res.json())
@@ -149,6 +162,7 @@ function assignRowEventListeners() {
       if (confirm("¿Está seguro de que desea eliminar este producto?")) {
         fetch(`http://52.20.1.18:3000/api/productos/${id}`, {
           method: "DELETE",
+          credentials: "include"
         })
           .then((res) => res.json())
           .then(() => location.reload());
@@ -157,12 +171,89 @@ function assignRowEventListeners() {
   });
 }
 
-// Colorea filas según stock
-function updateStockWarningClass(row, stockValue) {
-  row.classList.remove("stock-warning", "stock-critical");
-  if (stockValue <= 2) {
-    row.classList.add("stock-critical");
-  } else if (stockValue <= 5) {
-    row.classList.add("stock-warning");
-  }
-}
+// ================== CÓDIGO ANTERIOR COMENTADO ==================
+
+// Agregar nuevo producto
+//document.getElementById("btn-add-product").addEventListener("click", function () {
+//  const nombre = prompt("Nombre del producto:");
+//  const categoria = prompt("Categoría:");
+//  const stock = prompt("Stock inicial:");
+//  const proveedor = prompt("Proveedor:");
+//  if (nombre && categoria && stock && proveedor) {
+//    fetch("http://52.20.1.18:3000/api/productos", {
+//      method: "POST",
+//      headers: { "Content-Type": "application/json" },
+//      credentials: "include",
+//      body: JSON.stringify({ nombre, categoria, stock: parseInt(stock), proveedor }),
+//    })
+//      .then(async (res) => {
+//        if (!res.ok) {
+//          const text = await res.text();
+//          console.error("Respuesta del servidor (error):", res.status, text);
+//          throw new Error("No se pudo agregar el producto.");
+//        }
+//        return res.json();
+//      })
+//      .then(() => location.reload())
+//      .catch(err => {
+//        alert("Error al agregar producto. Ver consola.");
+//        console.log(err);
+//      });
+//  }
+//});
+//
+//
+//// Guardar cambios (solo recarga)
+//document.getElementById("btn-save-changes").addEventListener("click", function () {
+//  alert("Todos los cambios se guardan automáticamente.");
+//  location.reload();
+//});
+//
+//function assignRowEventListeners() {
+//  // Editar producto
+//  document.querySelectorAll(".btn-edit").forEach((button) => {
+//    button.addEventListener("click", function () {
+//      const row = this.closest("tr");
+//      const id = row.getAttribute("data-id");
+//      if (!id) {
+//        alert("Error: No se encontró el ID del producto.");
+//        return;
+//      }
+//      // Cambia los índices para que NO se edite el ID
+//      const nombre = prompt("Nuevo nombre:", row.cells[1].textContent);
+//      const categoria = prompt("Nueva categoría:", row.cells[2].textContent);
+//      const stock = prompt("Nuevo stock:", row.cells[3].textContent);
+//      const proveedor = prompt("Nuevo proveedor:", row.cells[4].textContent);
+//
+//      if (nombre && categoria && stock && proveedor) {
+//        fetch(`http://52.20.1.18:3000/api/productos/${id}`, {
+//          method: "PUT",
+//          headers: { "Content-Type": "application/json" },
+//          body: JSON.stringify({ nombre, categoria, stock: parseInt(stock), proveedor }),
+//        })
+//          .then((res) => res.json())
+//          .then(() => location.reload());
+//      }
+//    });
+//  });
+//
+//  // Eliminar producto
+//  document.querySelectorAll(".btn-delete").forEach((button) => {
+//    button.addEventListener("click", function () {
+//      const row = this.closest("tr");
+//      const id = row.getAttribute("data-id");
+//      if (!id) {
+//        alert("Error: No se encontró el ID del producto.");
+//        return;
+//      }
+//      if (confirm("¿Está seguro de que desea eliminar este producto?")) {
+//        fetch(`http://52.20.1.18:3000/api/productos/${id}`, {
+//          method: "DELETE",
+//        })
+//          .then((res) => res.json())
+//          .then(() => location.reload());
+//      }
+//    });
+//  });
+//}
+
